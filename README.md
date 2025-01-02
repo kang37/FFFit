@@ -13,10 +13,10 @@ includes both content and the output of embedded code. You can embed
 code like this:
 
 ``` r
-1 + 1
+plot(c(1:3))
 ```
 
-    [1] 2
+![](README_files/figure-commonmark/unnamed-chunk-1-1.png)
 
 You can add options to executable code like this
 
