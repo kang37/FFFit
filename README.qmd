@@ -19,7 +19,6 @@ library(googlesheets4)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(patchwork)
 library(showtext)
 showtext_auto()
 
@@ -80,9 +79,10 @@ train_record %>%
   ) + 
   facet_wrap(.~ exercise) + 
   theme_bw() + 
-  labs(x = "第N次训练", y = "重量标准化值") |
-  # 可视化重量变化。
-ggplot() + 
+  labs(x = "第N次训练", y = "重量标准化值")
+
+# 可视化重量变化。
+  ggplot() + 
   geom_segment(
     data = train_first_last_wide, 
     aes(x = exercise, xend = exercise, y = `初始重量`, yend = `当前重量`), 
