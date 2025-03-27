@@ -24,6 +24,7 @@ library(showtext)
 showtext_auto()
 
 # Data ----
+# 训练数据。
 train_record <- read_sheet(
   ss = paste0(
     "https://docs.google.com/spreadsheets/", 
@@ -43,6 +44,21 @@ train_record <- read_sheet(
     weight_init = first(weight), weight_scale = weight / weight_init
   ) %>% 
   ungroup()
+
+# 跑步数据。
+run <- read_sheet(
+  ss = paste0(
+    "https://docs.google.com/spreadsheets/", 
+    "d/13QYDHTo04Ee61e3BOLu05HHbnilhIsaOS3sT5EWjt6U/", 
+    "edit?gid=135844309#gid=135844309"
+  ), 
+  sheet = "跑步", range = "A:D"
+) %>% 
+  select(
+    "date" = "日期", "speed" = "时速公里", "duration" = "时间"
+  ) %>% 
+  arrange(date) %>% 
+  mutate(date_id = row_number())
 
 # 次数较多项目的初始重量和当前重量。
 train_first_last <- 
@@ -67,13 +83,13 @@ train_first_last_wide <- train_first_last %>%
 #   geom_line(aes(date_id, weight_scale)) + 
 #   facet_wrap(.~ exercise)
 
-fig_output <- 
+fig_exercise <- 
   # 次数较多的项目的重量变化。
   train_record %>% 
   group_by(exercise) %>% 
   mutate(date_id_max = max(date_id)) %>% 
   ungroup() %>% 
-  filter(date_id_max >= 3) %>% 
+  filter(date_id_max >= 5) %>% 
   ggplot() + 
   geom_line(aes(date_id, weight, col = rep), linewidth = 0.7) + 
   scale_color_gradient2(
@@ -82,5 +98,16 @@ fig_output <-
   facet_wrap(.~ exercise) + 
   theme_bw() + 
   labs(x = "训练日期ID", y = "重量", col = "重复数")
-print(fig_output)
+
+fig_run <- 
+  run %>% 
+  ggplot() + 
+  geom_line(aes(date_id, speed, col = duration), linewidth = 0.7) + 
+  scale_color_gradient2(
+    low = "darkgreen", high = "darkred", mid = "orange", midpoint = 12
+  ) + 
+  theme_bw() + 
+  labs(x = "训练日期ID", y = "时速（公里）", col = "时长")
+
+print(fig_exercise | fig_run)
 ```
