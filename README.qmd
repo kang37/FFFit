@@ -27,8 +27,8 @@ showtext_auto()
 train_record <- read_sheet(
   ss = paste0(
     "https://docs.google.com/spreadsheets/", 
-    "d/1pUFHIiLTAT3JexSDrs3fXUhE9urtcEPA57gzEI83r1M/", 
-    "edit?gid=1837755800#gid=1837755800"
+    "d/13QYDHTo04Ee61e3BOLu05HHbnilhIsaOS3sT5EWjt6U/", 
+    "edit?gid=135844309#gid=135844309"
   ), 
   sheet = "训练内容", range = "A:F"
 ) %>% 
@@ -75,12 +75,12 @@ fig_output <-
   ungroup() %>% 
   filter(date_id_max >= 3) %>% 
   ggplot() + 
-  geom_line(aes(date_id, weight, col = rep), size = 0.7) + 
+  geom_line(aes(date_id, weight, col = rep), linewidth = 0.7) + 
   scale_color_gradient2(
     low = "darkgreen", high = "darkred", mid = "orange", midpoint = 12
   ) + 
   facet_wrap(.~ exercise) + 
   theme_bw() + 
-  labs(x = "第N次训练", y = "重量", col = "重复数")
+  labs(x = "训练日期ID", y = "重量", col = "重复数")
 print(fig_output)
 ```
